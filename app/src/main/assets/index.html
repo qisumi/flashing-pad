@@ -68,7 +68,7 @@
               data: generateFakeData()
             }]
           })
-      }, 5000);
+      }, 20000);
       recvStatusTextDom.innerHTML = "已连接北斗设备"
     };
     beginRecvBtn.addEventListener("click", beginSimu);
@@ -170,7 +170,7 @@
         {
           dimensions: ['X','Y','Value'],
           type: 'scatter',
-          symbolSize: 10,
+          symbolSize: 8,
           data: null
         }
       ]
@@ -184,11 +184,12 @@
     // z from 0 to 1
     function generateFakeData() {
       let data = []
-      for (i = 0; i < 100; i++) {
-        data.push([Math.random() * 90 + 40,
+      for (i = 0; i < 90; i++) {
+        data.push([Math.random() * 40 + 90,
         Math.random() * 40,
         Math.random()])
       }
+      console.log(data)
       return data
     }
   </script>
