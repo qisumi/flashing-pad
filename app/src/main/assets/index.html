@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="file:///android_asset/js/echarts.js"></script>
+  <script src="js/echarts.js"></script>
+  <script src="file:///android_asset/js/zepto.js"></script>
+  <script src="js/zepto.js"></script>
+  <script src="file:///android_asset/js/dayjs.min.js"></script>
+  <script src="js/dayjs.min.js"></script>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="file:///android_asset/css/index.css">
+</head>
+
+<body>
+  <div class="debug-bar">
+    <button id="begin-recv">开始模拟接收数据</button>
+    <button id="finish-recv">结束模拟接收数据</button>
+    <div class="recv-status">
+      <canvas id="recv-status-prompt" width="22" height="22"></canvas>
+      <span id="recv-status-text">未连接北斗设备</span>
+    </div>
+  </div>
+  <div class="chart-container">
+    <div id="chart">
+
+    </div>
+  </div>
+  <script>
+
+    // 绘制状态提示圆点
+    let c = document.getElementById("recv-status-prompt");
+    let ctx = c.getContext("2d");
+    let simuInterval = null;
+    ctx.beginPath();
+    ctx.arc(10, 11, 9, 0, 2 * Math.PI);
+    ctx.stroke()
+    ctx.fillStyle = "#ff0000";
+    ctx.fill();
+
+    // 绑定在debug模式下状态提示圆点和文字的变化
+    recvStatusTextDom = document.getElementById("recv-status-text");
+    beginRecvBtn = document.getElementById("begin-recv");
+    finishRecvBtn = document.getElementById("finish-recv");
+
+    // 开始模拟接收数据
+    beginSimu = () => {
+      ctx.fillStyle = "#00ff00"
+      ctx.fill()
+      chart.setOption({
+        title: {
+          subtext: dayjs().format('YYYY-MM-DD HH:mm:ss')
+        },
+        series: [{
+          data: generateFakeData()
+        }]
+      })
+      simuInterval = setInterval(() => {
+        option =
+          chart.setOption({
+            title: {
+              subtext: dayjs().format('YYYY-MM-DD HH:mm:ss')
+            },
+            series: [{
+              data: generateFakeData()
+            }]
+          })
+      }, 5000);
+      recvStatusTextDom.innerHTML = "已连接北斗设备"
+    };
+    beginRecvBtn.addEventListener("click", beginSimu);
+
+    // 结束模拟接收数据
+    endSimu = () => {
+      recvStatusTextDom.innerHTML = "未连接北斗设备"
+      ctx.fillStyle = "#ff0000"
+      ctx.fill()
+      clearInterval(simuInterval);
+      chart.setOption({
+        series: [{
+          data: null
+        }]
+      })
+    }
+    finishRecvBtn.addEventListener("click", endSimu);
+
+    // 初始化echarts
+    var chart = echarts.init(document.getElementById('chart'));
+    let option = {
+      title: {
+        text: '闪烁指数图',
+        subtext: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        left: 'center',
+        top: 0,
+        subtextStyle: {
+          color: '#000',
+          fontSize: 18,
+        },
+        textStyle: {
+          color: '#000',
+          fontSize: 22,
+        },
+        left: 'center',
+        padding: 5,
+      },
+      visualMap: {
+        min: 0,
+        max: 1,
+        orient: 'vertical',
+        dimension:2,
+        right: 10,
+        top: 'center',
+        calculable: true,
+        inRange: {
+          color: ['#000080', '#0000ff', '#007cff', '#02fffe', '#fffc00', '#ff7c00', '#fc0000', '#800000']
+        },
+        itemHeight: 900,
+        formatter: v => v.toFixed(2),
+      },
+      tooltip: {
+        trigger: 'item',
+        axisPointer: {
+          type: 'cross'
+        },
+        formatter:(params)=>{
+          return "闪烁指数: "+params.data[2].toFixed(2)
+        }
+      },
+      xAxis: [
+        {
+          type: 'value',
+          interval: 10,
+          min: 90,
+          max: 130,
+          name: "Longitude(Degree)",
+          nameLocation: 'middle',
+          nameGap: 40,
+          nameTextStyle: {
+            color: '#000',
+            fontSize: 18
+          },
+          axisLabel: {
+            color: '#000'
+          },
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          min: 0,
+          max: 40,
+          interval: 5,
+          name: "Latitude(Degree)",
+          nameLocation: 'middle',
+          nameGap: 40,
+          nameRotate: 90,
+          nameTextStyle: {
+            color: '#000',
+            fontSize: 18
+          },
+          axisLabel: {
+            color: '#000',
+          }
+        }
+      ],
+      series: [
+        {
+          dimensions: ['X','Y','Value'],
+          type: 'scatter',
+          symbolSize: 10,
+          data: null
+        }
+      ]
+    };
+    chart.setOption(option)
+
+    // generate 100 random data like
+    // [[x,y,z]]
+    // x from 90 to 130
+    // y from 0 to 40
+    // z from 0 to 1
+    function generateFakeData() {
+      let data = []
+      for (i = 0; i < 100; i++) {
+        data.push([Math.random() * 90 + 40,
+        Math.random() * 40,
+        Math.random()])
+      }
+      return data
+    }
+  </script>
+</body>
+
+</html>

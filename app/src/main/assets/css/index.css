@@ -1,0 +1,44 @@
+*{
+  margin:0;
+  padding:0;
+}
+
+.recv-status{
+  display: inline-block;
+}
+
+#begin-recv,#finish-recv{
+  padding: 3px;
+  font-size: 20px;
+}
+
+.debug-bar{
+  display:flex;
+  align-items: center;
+  width: auto;
+  height: 34px;
+  background-color: grey;
+  color:aliceblue;
+  padding: 3px;
+  justify-content: space-around;
+  border: 0;
+}
+#recv-status-prompt{
+  display: inline-block;
+  vertical-align: middle;
+}
+#recv-status-text{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 22px;
+}
+.chart-container{
+  display:flex;
+  height: 95vh;
+  justify-content: space-around;
+  align-items: center;
+}
+#chart{
+  width: 800px;
+  height: 600px;
+}
