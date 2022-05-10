@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         // WebView实例化
         val mWebView = findViewById<View>(R.id.mWebView) as WebView
         // 开启javascript 渲染
-        mWebView.getSettings().javaScriptEnabled = true
+        mWebView.settings.javaScriptEnabled = true
         mWebView.webViewClient = WebViewClient()
         // 载入内容
         mWebView.loadUrl("file:///android_asset/index.html")
