@@ -7,7 +7,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 
-
 class MainActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +15,10 @@ class MainActivity : AppCompatActivity() {
 
         // WebView实例化
         val mWebView = findViewById<View>(R.id.mWebView) as WebView
-        // 开启javascript 渲染
+        // 开启 javascript 渲染
         mWebView.settings.javaScriptEnabled = true
+        // 开启 javascript 弹窗权限
+        mWebView.settings.javaScriptCanOpenWindowsAutomatically = true
         mWebView.webViewClient = WebViewClient()
         // 载入内容
         mWebView.loadUrl("file:///android_asset/index.html")
